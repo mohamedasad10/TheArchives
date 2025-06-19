@@ -49,4 +49,20 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// DELETE /api/items/:id → Remove item from archive
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedItem = await Item.findByIdAndDelete(req.params.id);
+
+    if (!deletedItem) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    res.status(200).json({ message: "🗑️ Item deleted successfully" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;
