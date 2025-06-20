@@ -6,113 +6,115 @@ function ItemForm({ onSubmit, editingItem }) {
   const [tag, setTag] = useState("");
   const [year, setYear] = useState("");
   const [price, setPrice] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (editingItem) {
       setName(editingItem.name || "");
       setNote(editingItem.note || "");
       setTag(editingItem.tag || "");
-      setYear(editingItem.year ? String(editingItem.year) : "");
-      setPrice(editingItem.price ? String(editingItem.price) : "");
+      setYear(editingItem.year || "");
+      setPrice(editingItem.price || "");
+      setShowForm(true);
     }
   }, [editingItem]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim()) return;
-
-    const itemData = {
-      name: name.trim(),
-      note: note.trim(),
-      tag: tag.trim(),
-      year: year ? Number(year) : null,
-      price: price ? Number(price) : null,
-    };
-
-    onSubmit(itemData);
-
+    if (!name) return;
+    onSubmit({ name, note, tag, year, price });
     setName("");
     setNote("");
     setTag("");
     setYear("");
     setPrice("");
+    setShowForm(false);
+  };
+
+  const formContainerStyle = {
+    marginBottom: "2rem",
+    background: "#f9f9f9",
+    padding: "1rem",
+    borderRadius: "8px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
   };
 
   const inputStyle = {
-    padding: "0.5rem",
-    marginBottom: "1rem",
+    display: "block",
     width: "100%",
-    maxWidth: "400px",
+    padding: "0.5rem",
+    marginBottom: "0.8rem",
     borderRadius: "5px",
     border: "1px solid #ccc",
     fontSize: "1rem",
-    boxSizing: "border-box",
-    outline: "none",
-    transition: "border-color 0.2s",
   };
 
   const buttonStyle = {
     padding: "0.6rem 1.2rem",
-    backgroundColor: "#2c7a7b",
+    backgroundColor: "#3182ce",
     color: "#fff",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    fontWeight: "600",
+    fontWeight: "bold",
     fontSize: "1rem",
-    transition: "background-color 0.3s",
+  };
+
+  const addButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: "#2f855a",
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "2rem" }}>
-      <input
-        style={inputStyle}
-        type="text"
-        placeholder="Item name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        style={inputStyle}
-        type="number"
-        placeholder="Year (e.g., 2013)"
-        value={year}
-        onChange={(e) => setYear(e.target.value)}
-        min="0"
-      />
-      <input
-        style={inputStyle}
-        type="number"
-        placeholder="Price (R)"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        min="0"
-        step="0.01"
-      />
-      <input
-        style={inputStyle}
-        type="text"
-        placeholder="Tag (e.g., Medicine)"
-        value={tag}
-        onChange={(e) => setTag(e.target.value)}
-      />
-      <input
-        style={inputStyle}
-        type="text"
-        placeholder="Short note"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-      />
-      <button
-        type="submit"
-        style={buttonStyle}
-        onMouseOver={e => (e.currentTarget.style.backgroundColor = "#285e61")}
-        onMouseOut={e => (e.currentTarget.style.backgroundColor = "#2c7a7b")}
-      >
-        {editingItem ? "Update" : "Add"} Item
-      </button>
-    </form>
+    <div style={{ marginBottom: "2rem" }}>
+      {!showForm && !editingItem && (
+        <button onClick={() => setShowForm(true)} style={addButtonStyle}>
+          ➕ Add Item
+        </button>
+      )}
+
+      {showForm && (
+        <form onSubmit={handleSubmit} style={formContainerStyle}>
+          <input
+            placeholder="Item name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={inputStyle}
+            required
+          />
+          <input
+            placeholder="Year (e.g., 2013)"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            type="number"
+            style={inputStyle}
+          />
+          <input
+            placeholder="Price (R)"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            type="number"
+            style={inputStyle}
+          />
+          <input
+            placeholder="Tag (e.g., Medicine)"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+            style={inputStyle}
+          />
+          <input
+            placeholder="Short note"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            style={inputStyle}
+          />
+
+          <button type="submit" style={buttonStyle}>
+            {editingItem ? "Update" : "Add"} Item
+          </button>
+        </form>
+      )}
+    </div>
   );
 }
 
