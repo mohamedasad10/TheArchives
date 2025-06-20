@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+
 import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
+import TagFilterBar from "./components/TagFilterBar";
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [tagFilter, setTagFilter] = useState("");
+  // Main app state
+  const [items, setItems] = useState([]); // All items in the archive
+  const [editingIndex, setEditingIndex] = useState(null); // Index of item being edited
+  const [searchTerm, setSearchTerm] = useState(""); // Search input value
+  const [tagFilter, setTagFilter] = useState(""); // Tag filter input or clicked tag
 
-  
+  // When a tag is clicked (in TagFilterBar or item), set it as the filter
   const handleTagClick = (tag) => {
     setTagFilter(tag);
   };
 
-  // Fetch items from the backend on first load
+  // Fetch all items from backend (on first component mount)
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/items")
@@ -22,8 +26,10 @@ function App() {
       .catch((err) => console.error("Error fetching items:", err));
   }, []);
 
+  // Create or Update an item
   const handleAddOrEdit = (item) => {
     if (editingIndex !== null) {
+      // 🔁 Update existing item
       const id = items[editingIndex]._id;
       axios
         .put(`http://localhost:5000/api/items/${id}`, item)
@@ -31,32 +37,37 @@ function App() {
           const updatedItems = [...items];
           updatedItems[editingIndex] = res.data;
           setItems(updatedItems);
-          setEditingIndex(null);
+          setEditingIndex(null); // exit editing mode
         })
         .catch((err) => console.error("Error updating item:", err));
     } else {
+      // Add a new item
       axios
         .post("http://localhost:5000/api/items", item)
-        .then((res) => setItems([res.data, ...items]))
+        .then((res) => setItems([res.data, ...items])) // insert new item at top
         .catch((err) => console.error("Error adding item:", err));
     }
   };
 
+  // Delete an item by index
   const handleDelete = (index) => {
     const id = items[index]._id;
     axios
       .delete(`http://localhost:5000/api/items/${id}`)
       .then(() => {
+        // remove item from state
         const newItems = items.filter((_, i) => i !== index);
         setItems(newItems);
       })
       .catch((err) => console.error("Error deleting item:", err));
   };
 
+  // Trigger edit mode for a selected item
   const handleEdit = (index) => {
     setEditingIndex(index);
   };
 
+  // Filter items by search term (name or note) and selected tag
   const filteredItems = items.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,6 +84,7 @@ function App() {
     <div style={{ padding: "2rem" }}>
       <h1>🧠 The Archives</h1>
 
+      {/* Text input for search */}
       <input
         type="text"
         placeholder="Search by name or note"
@@ -81,6 +93,7 @@ function App() {
         style={{ marginRight: "1rem" }}
       />
 
+      {/* Text input for tag filter */}
       <input
         type="text"
         placeholder="Filter by tag"
@@ -88,7 +101,7 @@ function App() {
         onChange={(e) => setTagFilter(e.target.value)}
       />
 
-      {/* ✅ Clear Tag Filter Button */}
+      {/* Clear tag filter button (only if active) */}
       {tagFilter && (
         <button
           onClick={() => setTagFilter("")}
@@ -104,12 +117,20 @@ function App() {
         </button>
       )}
 
+      {/* Form to add/edit an item */}
       <ItemForm
         onSubmit={handleAddOrEdit}
         editingItem={editingIndex !== null ? items[editingIndex] : null}
       />
 
-      {/*  Pass handleTagClick to ItemList */}
+      {/* Dynamic clickable tags (YouTube style) */}
+      <TagFilterBar
+        tags={[...new Set(items.map(item => item.tag))]} // get unique tags
+        onTagClick={handleTagClick}
+        currentTag={tagFilter}
+      />
+
+      {/* Item display list */}
       <ItemList
         items={filteredItems}
         onDelete={handleDelete}
