@@ -9,6 +9,11 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [tagFilter, setTagFilter] = useState("");
 
+  
+  const handleTagClick = (tag) => {
+    setTagFilter(tag);
+  };
+
   // Fetch items from the backend on first load
   useEffect(() => {
     axios
@@ -17,10 +22,8 @@ function App() {
       .catch((err) => console.error("Error fetching items:", err));
   }, []);
 
-  // Add or Update Item
   const handleAddOrEdit = (item) => {
     if (editingIndex !== null) {
-      // EDIT existing item
       const id = items[editingIndex]._id;
       axios
         .put(`http://localhost:5000/api/items/${id}`, item)
@@ -32,7 +35,6 @@ function App() {
         })
         .catch((err) => console.error("Error updating item:", err));
     } else {
-      // ADD new item
       axios
         .post("http://localhost:5000/api/items", item)
         .then((res) => setItems([res.data, ...items]))
@@ -40,7 +42,6 @@ function App() {
     }
   };
 
-  // Delete Item
   const handleDelete = (index) => {
     const id = items[index]._id;
     axios
@@ -52,12 +53,10 @@ function App() {
       .catch((err) => console.error("Error deleting item:", err));
   };
 
-  //  Set editing mode
   const handleEdit = (index) => {
     setEditingIndex(index);
   };
 
-  //  Filter items by search and tag
   const filteredItems = items.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,12 +88,34 @@ function App() {
         onChange={(e) => setTagFilter(e.target.value)}
       />
 
+      {/* ✅ Clear Tag Filter Button */}
+      {tagFilter && (
+        <button
+          onClick={() => setTagFilter("")}
+          style={{
+            marginLeft: "1rem",
+            background: "#eee",
+            border: "none",
+            padding: "0.25rem 0.5rem",
+            cursor: "pointer",
+          }}
+        >
+          ❌ Clear Tag Filter
+        </button>
+      )}
+
       <ItemForm
         onSubmit={handleAddOrEdit}
         editingItem={editingIndex !== null ? items[editingIndex] : null}
       />
 
-      <ItemList items={filteredItems} onDelete={handleDelete} onEdit={handleEdit} />
+      {/*  Pass handleTagClick to ItemList */}
+      <ItemList
+        items={filteredItems}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+        onTagClick={handleTagClick}
+      />
     </div>
   );
 }
