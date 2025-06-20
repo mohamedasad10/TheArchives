@@ -112,6 +112,20 @@ function ItemForm({ onSubmit, editingItem }) {
           <button type="submit" style={buttonStyle}>
             {editingItem ? "Update" : "Add"} Item
           </button>
+          {!editingItem && (
+            <button
+              type="button"
+              onClick={() => setShowForm(false)}
+              style={{
+                ...buttonStyle,
+                backgroundColor: "#e53e3e", // red color
+                marginLeft: "1rem",
+              }}
+            >
+              Cancel
+            </button>
+          )}
+
         </form>
       )}
     </div>
