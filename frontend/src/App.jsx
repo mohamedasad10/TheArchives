@@ -4,6 +4,7 @@ import axios from "axios";
 import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
 import TagFilterBar from "./components/TagFilterBar";
+import SpendingSummary from "./SpendingSummary";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -146,6 +147,8 @@ function App() {
         onTagClick={handleTagClick}
         currentTag={tagFilter}
       />
+
+      <SpendingSummary items={items} />
 
       <ItemList
         items={filteredItems}
