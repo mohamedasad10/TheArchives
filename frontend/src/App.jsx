@@ -5,12 +5,14 @@ import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
 import TagFilterBar from "./components/TagFilterBar";
 import SpendingSummary from "./SpendingSummary";
+import AnalyticsDashboard from "./components/AnalyticsDashboard"; 
 
 function App() {
   const [items, setItems] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [tagFilter, setTagFilter] = useState("");
+  const [currentView, setCurrentView] = useState("items"); // New state for view switching
 
   const handleTagClick = (tag) => {
     setTagFilter(tag);
@@ -72,7 +74,7 @@ function App() {
 
   const containerStyle = {
     padding: "2rem 1rem",
-    maxWidth: "700px",
+    maxWidth: "1200px", // Increased max width for analytics
     margin: "0 auto",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: "#2d3748",
@@ -106,56 +108,106 @@ function App() {
     height: "fit-content",
   };
 
+  // Navigation button styles
+  const navButtonStyle = {
+    padding: "0.6rem 1.2rem",
+    margin: "0.25rem",
+    borderRadius: "8px",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold",
+    fontSize: "1rem",
+    transition: "all 0.3s ease",
+  };
+
+  const activeNavButtonStyle = {
+    ...navButtonStyle,
+    backgroundColor: "#3182ce",
+    color: "white",
+  };
+
+  const inactiveNavButtonStyle = {
+    ...navButtonStyle,
+    backgroundColor: "#e2e8f0",
+    color: "#2d3748",
+  };
+
   return (
     <div style={containerStyle}>
       <h1 style={{ textAlign: "center", marginBottom: "1.5rem" }}>🧠 The Archives</h1>
 
-      <div style={inputGroupStyle}>
-        <input
-          type="text"
-          placeholder="Search by name or note"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={inputStyle}
-        />
-        <input
-          type="text"
-          placeholder="Filter by tag"
-          value={tagFilter}
-          onChange={(e) => setTagFilter(e.target.value)}
-          style={inputStyle}
-        />
-        {tagFilter && (
-          <button
-            onClick={() => setTagFilter("")}
-            style={clearButtonStyle}
-            onMouseOver={(e) => (e.currentTarget.style.background = "#cbd5e1")}
-            onMouseOut={(e) => (e.currentTarget.style.background = "#e2e8f0")}
-          >
-            ❌ Clear
-          </button>
-        )}
+      {/* Navigation */}
+      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <button
+          onClick={() => setCurrentView("items")}
+          style={currentView === "items" ? activeNavButtonStyle : inactiveNavButtonStyle}
+        >
+          📝 Items & Management
+        </button>
+        <button
+          onClick={() => setCurrentView("analytics")}
+          style={currentView === "analytics" ? activeNavButtonStyle : inactiveNavButtonStyle}
+        >
+          📊 Analytics & Insights
+        </button>
       </div>
 
-      <ItemForm
-        onSubmit={handleAddOrEdit}
-        editingItem={editingIndex !== null ? items[editingIndex] : null}
-      />
+      {/* Items View */}
+      {currentView === "items" && (
+        <>
+          <div style={inputGroupStyle}>
+            <input
+              type="text"
+              placeholder="Search by name or note"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              type="text"
+              placeholder="Filter by tag"
+              value={tagFilter}
+              onChange={(e) => setTagFilter(e.target.value)}
+              style={inputStyle}
+            />
+            {tagFilter && (
+              <button
+                onClick={() => setTagFilter("")}
+                style={clearButtonStyle}
+                onMouseOver={(e) => (e.currentTarget.style.background = "#cbd5e1")}
+                onMouseOut={(e) => (e.currentTarget.style.background = "#e2e8f0")}
+              >
+                ❌ Clear
+              </button>
+            )}
+          </div>
 
-      <TagFilterBar
-        tags={[...new Set(items.map((item) => item.tag))]}
-        onTagClick={handleTagClick}
-        currentTag={tagFilter}
-      />
+          <ItemForm
+            onSubmit={handleAddOrEdit}
+            editingItem={editingIndex !== null ? items[editingIndex] : null}
+          />
 
-      <SpendingSummary items={items} />
+          <TagFilterBar
+            tags={[...new Set(items.map((item) => item.tag))]}
+            onTagClick={handleTagClick}
+            currentTag={tagFilter}
+          />
 
-      <ItemList
-        items={filteredItems}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-        onTagClick={handleTagClick}
-      />
+          <SpendingSummary items={items} />
+
+          <ItemList
+            items={filteredItems}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onTagClick={handleTagClick}
+          />
+        </>
+      )}
+
+      {/* Analytics View */}
+      {currentView === "analytics" && (
+        <AnalyticsDashboard items={items} />
+      )}
     </div>
   );
 }
