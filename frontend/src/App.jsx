@@ -193,7 +193,6 @@ function App() {
             currentTag={tagFilter}
           />
 
-          <SpendingSummary items={items} />
 
           <ItemList
             items={filteredItems}
