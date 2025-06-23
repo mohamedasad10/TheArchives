@@ -4,14 +4,14 @@ import axios from "axios";
 import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
 import TagFilterBar from "./components/TagFilterBar";
-import AnalyticsDashboard from "./components/AnalyticsDashboard"; 
+import AnalyticsDashboard from "./components/AnalyticsDashboard";
 
 function App() {
   const [items, setItems] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [tagFilter, setTagFilter] = useState("");
-  const [currentView, setCurrentView] = useState("items"); // New state for view switching
+  const [currentView, setCurrentView] = useState("home");
 
   const handleTagClick = (tag) => {
     setTagFilter(tag);
@@ -73,7 +73,7 @@ function App() {
 
   const containerStyle = {
     padding: "2rem 1rem",
-    maxWidth: "1200px", // Increased max width for analytics
+    maxWidth: "1200px",
     margin: "0 auto",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     color: "#2d3748",
@@ -107,7 +107,6 @@ function App() {
     height: "fit-content",
   };
 
-  // Navigation button styles
   const navButtonStyle = {
     padding: "0.6rem 1.2rem",
     margin: "0.25rem",
@@ -138,6 +137,12 @@ function App() {
       {/* Navigation */}
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
         <button
+          onClick={() => setCurrentView("home")}
+          style={currentView === "home" ? activeNavButtonStyle : inactiveNavButtonStyle}
+        >
+          🏠 Home
+        </button>
+        <button
           onClick={() => setCurrentView("items")}
           style={currentView === "items" ? activeNavButtonStyle : inactiveNavButtonStyle}
         >
@@ -150,6 +155,67 @@ function App() {
           📊 Analytics & Insights
         </button>
       </div>
+
+      {/* Home View */}
+      {currentView === "home" && (
+        <div style={styles.welcomeSection}>
+          <h1 style={styles.welcomeTitle}>
+            <span>🧠</span> Welcome to The Archives
+          </h1>
+          <p style={styles.welcomeDescription}>
+            You can store your important notes, documents, ideas, and memories in one organized place.
+            The Archives helps you categorize, search, and analyze your personal knowledge base with
+            powerful tagging and filtering capabilities. Keep track of everything that matters to you
+            and discover insights about your collected information.
+          </p>
+
+          <button
+            style={styles.getStartedButton}
+            onClick={() => setCurrentView("items")}
+            onMouseOver={(e) => {
+              e.target.style.backgroundColor = '#2563eb';
+              e.target.style.transform = 'translateY(-1px)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.backgroundColor = '#3b82f6';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            Get Started
+          </button>
+
+          <div style={styles.featureGrid}>
+            <div style={styles.featureCard}>
+              <div style={styles.featureIcon}>📝</div>
+              <div style={styles.featureTitle}>Organize</div>
+              <div style={styles.featureDescription}>
+                Add and categorize your items with custom tags
+              </div>
+            </div>
+            <div style={styles.featureCard}>
+              <div style={styles.featureIcon}>🔍</div>
+              <div style={styles.featureTitle}>Search</div>
+              <div style={styles.featureDescription}>
+                Find anything instantly with powerful search filters
+              </div>
+            </div>
+            <div style={styles.featureCard}>
+              <div style={styles.featureIcon}>📊</div>
+              <div style={styles.featureTitle}>Analyze</div>
+              <div style={styles.featureDescription}>
+                Gain insights from your archived information
+              </div>
+            </div>
+            <div style={styles.featureCard}>
+              <div style={styles.featureIcon}>🔒</div>
+              <div style={styles.featureTitle}>Secure</div>
+              <div style={styles.featureDescription}>
+                Your data is safely stored and always accessible
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Items View */}
       {currentView === "items" && (
@@ -192,7 +258,6 @@ function App() {
             currentTag={tagFilter}
           />
 
-
           <ItemList
             items={filteredItems}
             onDelete={handleDelete}
@@ -211,3 +276,62 @@ function App() {
 }
 
 export default App;
+
+// Styles for Home View
+const styles = {
+  welcomeSection: {
+    textAlign: "center",
+    padding: "2rem",
+    backgroundColor: "#f7fafc",
+    borderRadius: "12px",
+  },
+  welcomeTitle: {
+    fontSize: "2rem",
+    fontWeight: "bold",
+    marginBottom: "1rem",
+  },
+  welcomeDescription: {
+    fontSize: "1rem",
+    color: "#4a5568",
+    marginBottom: "2rem",
+    maxWidth: "600px",
+    marginInline: "auto",
+  },
+  getStartedButton: {
+    backgroundColor: "#3b82f6",
+    color: "#fff",
+    padding: "0.75rem 1.5rem",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "1rem",
+    transition: "all 0.3s ease",
+    marginBottom: "2rem",
+  },
+  featureGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "1.5rem",
+    maxWidth: "900px",
+    margin: "0 auto",
+  },
+  featureCard: {
+    backgroundColor: "#ffffff",
+    padding: "1.5rem",
+    borderRadius: "10px",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+  },
+  featureIcon: {
+    fontSize: "2rem",
+    marginBottom: "0.5rem",
+  },
+  featureTitle: {
+    fontWeight: "bold",
+    marginBottom: "0.25rem",
+  },
+  featureDescription: {
+    fontSize: "0.9rem",
+    color: "#4a5568",
+  },
+};
+
