@@ -14,6 +14,14 @@ function App() {
   const [currentView, setCurrentView] = useState("home");
 
   useEffect(() => {
+  document.body.style.margin = "0";
+  document.body.style.padding = "0";
+  document.documentElement.style.margin = "0";
+  document.documentElement.style.padding = "0";
+}, []);
+
+
+  useEffect(() => {
     axios
       .get("http://localhost:5000/api/items")
       .then((res) => setItems(res.data))
