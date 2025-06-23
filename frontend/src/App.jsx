@@ -4,7 +4,6 @@ import axios from "axios";
 import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
 import TagFilterBar from "./components/TagFilterBar";
-import SpendingSummary from "./SpendingSummary";
 import AnalyticsDashboard from "./components/AnalyticsDashboard"; 
 
 function App() {
