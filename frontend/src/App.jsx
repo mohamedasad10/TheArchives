@@ -26,7 +26,7 @@ function App() {
   // Effect to fetch items from API on component mount
   useEffect(() => {
     axios
-      .get("https://thearchives-backend.onrender.com/api/items")
+      .get("https://thearchives-backend.onrender.com/api/items")     //CHNAGED SO NOW backend is always running
       .then((res) => setItems(res.data))
       .catch((err) => console.error("Error fetching items:", err));
   }, []);
