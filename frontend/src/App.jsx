@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// Import custom components
 import ItemForm from "./components/ItemForm";
 import ItemList from "./components/ItemList";
 import TagFilterBar from "./components/TagFilterBar";
 import AnalyticsDashboard from "./components/AnalyticsDashboard";
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [tagFilter, setTagFilter] = useState("");
-  const [currentView, setCurrentView] = useState("home");
+  // State management for the application
+  const [items, setItems] = useState([]); // Array to store all items
+  const [editingIndex, setEditingIndex] = useState(null); // Index of item being edited (null when adding new)
+  const [searchTerm, setSearchTerm] = useState(""); // Search input value
+  const [tagFilter, setTagFilter] = useState(""); // Tag filter value
+  const [currentView, setCurrentView] = useState("home"); // Current active view/tab
 
+  // Effect to remove default browser margins and padding
   useEffect(() => {
-  document.body.style.margin = "0";
-  document.body.style.padding = "0";
-  document.documentElement.style.margin = "0";
-  document.documentElement.style.padding = "0";
-}, []);
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+    document.documentElement.style.margin = "0";
+    document.documentElement.style.padding = "0";
+  }, []);
 
-
+  // Effect to fetch items from API on component mount
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/items")
@@ -28,57 +31,93 @@ function App() {
       .catch((err) => console.error("Error fetching items:", err));
   }, []);
 
+  // Handler for adding new items or editing existing ones
   const handleAddOrEdit = (item) => {
+    console.log("handleAddOrEdit called with:", item);
+    console.log("editingIndex:", editingIndex);
+    
+    // Check if we're editing an existing item
     if (editingIndex !== null) {
+      // Update existing item
       const id = items[editingIndex]._id;
+      console.log("Updating item with ID:", id);
+      console.log("Update data:", item);
+      
       axios
         .put(`http://localhost:5000/api/items/${id}`, item)
         .then((res) => {
+          console.log("Update response:", res.data);
+          // Update the item in the local state
           const updatedItems = [...items];
           updatedItems[editingIndex] = res.data;
           setItems(updatedItems);
-          setEditingIndex(null);
+          setEditingIndex(null); // Reset editing state
+          console.log("Items after update:", updatedItems);
         })
-        .catch((err) => console.error("Error updating item:", err));
+        .catch((err) => {
+          console.error("Error updating item:", err);
+          console.error("Error response:", err.response);
+        });
     } else {
+      // Add new item
+      console.log("Adding new item:", item);
       axios
         .post("http://localhost:5000/api/items", item)
-        .then((res) => setItems([res.data, ...items]))
-        .catch((err) => console.error("Error adding item:", err));
+        .then((res) => {
+          console.log("Add response:", res.data);
+          // Add new item to the beginning of the array
+          setItems([res.data, ...items]);
+        })
+        .catch((err) => {
+          console.error("Error adding item:", err);
+          console.error("Error response:", err.response);
+        });
     }
   };
 
+  // Handler for deleting items
   const handleDelete = (index) => {
     const id = items[index]._id;
     axios
       .delete(`http://localhost:5000/api/items/${id}`)
       .then(() => {
+        // Remove item from local state
         const newItems = items.filter((_, i) => i !== index);
         setItems(newItems);
       })
       .catch((err) => console.error("Error deleting item:", err));
   };
 
+  // Handler for initiating item editing
   const handleEdit = (index) => {
-    setEditingIndex(index);
+    console.log("handleEdit called with index:", index);
+    console.log("Item to edit:", items[index]);
+    setEditingIndex(index); // Set the index of item being edited
   };
 
+  // Handler for tag click events (sets tag filter)
   const handleTagClick = (tag) => {
     setTagFilter(tag);
   };
 
+  // Filter items based on search term and tag filter
   const filteredItems = items.filter((item) => {
+    // Check if item matches search term (case-insensitive)
     const matchesSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.note.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // Check if item matches tag filter (case-insensitive)
     const matchesTag = tagFilter
       ? item.tag.toLowerCase() === tagFilter.toLowerCase()
       : true;
+    
     return matchesSearch && matchesTag;
   });
 
-  // New "hti style" style object
+  // Comprehensive styling object for the entire application
   const styles = {
+    // Main container styling with gradient background
     container: {
       minHeight: "100vh",
       background:
@@ -88,10 +127,12 @@ function App() {
         "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       color: "#f8fafc",
     },
+    // Header section styling
     header: {
       textAlign: "center",
       marginBottom: "3rem",
     },
+    // Main title with gradient text effect
     title: {
       fontSize: "3rem",
       fontWeight: "bold",
@@ -102,11 +143,13 @@ function App() {
       marginBottom: "0.5rem",
       textShadow: "0 0 30px rgba(59, 130, 246, 0.3)",
     },
+    // Subtitle styling
     subtitle: {
       fontSize: "1.2rem",
       color: "#94a3b8",
       fontWeight: "300",
     },
+    // Navigation bar styling
     navigation: {
       display: "flex",
       justifyContent: "center",
@@ -114,6 +157,7 @@ function App() {
       marginBottom: "3rem",
       flexWrap: "wrap",
     },
+    // Base navigation button styling
     navButton: {
       padding: "0.75rem 1.5rem",
       borderRadius: "12px",
@@ -125,22 +169,26 @@ function App() {
       position: "relative",
       overflow: "hidden",
     },
+    // Active navigation button styling
     activeNavButton: {
       background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
       color: "white",
       boxShadow: "0 8px 25px rgba(59, 130, 246, 0.4)",
       transform: "translateY(-2px)",
     },
+    // Inactive navigation button styling
     inactiveNavButton: {
       backgroundColor: "rgba(30, 41, 59, 0.8)",
       color: "#cbd5e1",
       backdropFilter: "blur(10px)",
       border: "1px solid rgba(71, 85, 105, 0.3)",
     },
+    // Main content area styling
     main: {
       maxWidth: "1200px",
       margin: "0 auto",
     },
+    // Welcome section styling for home page
     welcomeSection: {
       textAlign: "center",
       padding: "4rem 2rem",
@@ -150,6 +198,7 @@ function App() {
       border: "1px solid rgba(71, 85, 105, 0.2)",
       boxShadow: "0 25px 50px rgba(0, 0, 0, 0.3)",
     },
+    // Welcome title styling
     welcomeTitle: {
       fontSize: "2.5rem",
       fontWeight: "bold",
@@ -159,6 +208,7 @@ function App() {
       WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent",
     },
+    // Welcome description text styling
     welcomeDescription: {
       fontSize: "1.2rem",
       maxWidth: "700px",
@@ -166,6 +216,7 @@ function App() {
       color: "#cbd5e1",
       lineHeight: "1.7",
     },
+    // Get started button styling
     getStartedButton: {
       padding: "1rem 2rem",
       fontSize: "1.1rem",
@@ -179,12 +230,14 @@ function App() {
       transition: "all 0.3s ease",
       boxShadow: "0 10px 30px rgba(59, 130, 246, 0.3)",
     },
+    // Feature grid layout for feature cards
     featureGrid: {
       display: "grid",
       gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
       gap: "2rem",
       marginTop: "3rem",
     },
+    // Individual feature card styling
     featureCard: {
       background: "rgba(17, 24, 39, 0.6)",
       padding: "2rem",
@@ -195,22 +248,26 @@ function App() {
       transition: "all 0.3s ease",
       cursor: "pointer",
     },
+    // Feature card icon styling
     featureIcon: {
       fontSize: "3rem",
       marginBottom: "1rem",
       filter: "drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))",
     },
+    // Feature card title styling
     featureTitle: {
       fontWeight: "bold",
       fontSize: "1.3rem",
       marginBottom: "1rem",
       color: "#f8fafc",
     },
+    // Feature card description styling
     featureDescription: {
       fontSize: "1rem",
       color: "#94a3b8",
       lineHeight: "1.6",
     },
+    // Input group container styling
     inputGroup: {
       display: "flex",
       flexWrap: "wrap",
@@ -222,6 +279,7 @@ function App() {
       backdropFilter: "blur(10px)",
       border: "1px solid rgba(71, 85, 105, 0.2)",
     },
+    // Input field styling
     input: {
       flex: "1 1 250px",
       padding: "0.75rem 1rem",
@@ -233,6 +291,7 @@ function App() {
       backdropFilter: "blur(5px)",
       transition: "all 0.3s ease",
     },
+    // Clear button styling
     clearButton: {
       padding: "0.75rem 1.5rem",
       background: "linear-gradient(135deg, #ef4444, #dc2626)",
@@ -245,6 +304,7 @@ function App() {
       transition: "all 0.3s ease",
       boxShadow: "0 4px 15px rgba(239, 68, 68, 0.3)",
     },
+    // Footer section styling
     footer: {
       marginTop: "6rem",
       background: "rgba(17, 24, 39, 0.8)",
@@ -254,6 +314,7 @@ function App() {
       backdropFilter: "blur(20px)",
       border: "1px solid rgba(55, 65, 81, 0.2)",
     },
+    // Footer content layout
     footerContent: {
       display: "flex",
       flexWrap: "wrap",
@@ -262,20 +323,24 @@ function App() {
       maxWidth: "1000px",
       margin: "0 auto",
     },
+    // Footer section styling
     footerSection: {
       flex: "1 1 250px",
     },
+    // Footer title styling
     footerTitle: {
       fontSize: "1.3rem",
       fontWeight: "bold",
       marginBottom: "1rem",
       color: "#f8fafc",
     },
+    // Footer text styling
     footerText: {
       fontSize: "0.95rem",
       lineHeight: "1.6",
       color: "#cbd5e1",
     },
+    // Footer bottom section styling
     footerBottom: {
       textAlign: "center",
       marginTop: "2rem",
@@ -288,6 +353,7 @@ function App() {
 
   return (
     <div style={styles.container}>
+      {/* Header Section */}
       <header style={styles.header}>
         <h1 style={styles.title}>🧠 The Archives</h1>
         <p style={styles.subtitle}>
@@ -295,6 +361,7 @@ function App() {
         </p>
       </header>
 
+      {/* Navigation Bar */}
       <nav style={styles.navigation}>
         <button
           onClick={() => setCurrentView("home")}
@@ -331,8 +398,9 @@ function App() {
         </button>
       </nav>
 
+      {/* Main Content Area */}
       <main style={styles.main}>
-        {/* Home View */}
+        {/* Home View - Welcome page with features */}
         {currentView === "home" && (
           <div style={styles.welcomeSection}>
             <h1 style={styles.welcomeTitle}>
@@ -358,6 +426,7 @@ function App() {
             >
               Get Started
             </button>
+            {/* Feature Cards Grid */}
             <div style={styles.featureGrid}>
               <div style={styles.featureCard}>
                 <div style={styles.featureIcon}>📝</div>
@@ -391,9 +460,10 @@ function App() {
           </div>
         )}
 
-        {/* Items View */}
+        {/* Items View - Main functionality page */}
         {currentView === "items" && (
           <>
+            {/* Search and Filter Controls */}
             <div style={styles.inputGroup}>
               <input
                 type="text"
@@ -409,6 +479,7 @@ function App() {
                 onChange={(e) => setTagFilter(e.target.value)}
                 style={styles.input}
               />
+              {/* Clear filter button - only shown when tag filter is active */}
               {tagFilter && (
                 <button
                   onClick={() => setTagFilter("")}
@@ -425,17 +496,20 @@ function App() {
               )}
             </div>
 
+            {/* Item Form Component - for adding/editing items */}
             <ItemForm
               onSubmit={handleAddOrEdit}
               editingItem={editingIndex !== null ? items[editingIndex] : null}
             />
 
+            {/* Tag Filter Bar Component - shows available tags */}
             <TagFilterBar
-              tags={[...new Set(items.map((item) => item.tag))]}
+              tags={[...new Set(items.map((item) => item.tag))]} // Get unique tags
               onTagClick={handleTagClick}
               currentTag={tagFilter}
             />
 
+            {/* Item List Component - displays filtered items */}
             <ItemList
               items={filteredItems}
               onDelete={handleDelete}
@@ -445,10 +519,11 @@ function App() {
           </>
         )}
 
-        {/* Analytics View */}
+        {/* Analytics View - Dashboard with data insights */}
         {currentView === "analytics" && <AnalyticsDashboard items={items} />}
       </main>
 
+      {/* Footer Section */}
       <footer style={styles.footer}>
         <div style={styles.footerContent}>
           <div style={styles.footerSection}>

@@ -2,16 +2,43 @@
 
 const mongoose = require("mongoose");
 
-// Define the structure/schema for each item in the archive
-const itemSchema = new mongoose.Schema({
-  name: { type: String, required: true },  // Item name is mandatory
-  year: Number,                            // Optional: year of purchase or use
-  price: Number,                           // Optional: how much it cost
-  tag: String,                             // Optional: category e.g., 'medicine'
-  note: String,                            // Optional: additional info like brand/dosage
-  createdAt: { type: Date, default: Date.now }  // Auto-sets when item is created
+const ItemSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  note: {
+    type: String,
+    trim: true
+  },
+  tag: {
+    type: String,
+    trim: true
+  },
+  year: {
+    type: Number,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  image: {
+    type: String,
+    trim: true,
+    default: ''
+  }
+}, {
+  timestamps: true,
+  strict: false // Temporarily set to false to see if this fixes it
 });
 
-// Export the model to use it in routes
-const Item = mongoose.model("Item", itemSchema);
-module.exports = Item;
+// Add a pre-save hook to debug
+ItemSchema.pre('save', function(next) {
+  console.log('Pre-save hook - this.image:', this.image);
+  console.log('Pre-save hook - full document:', this.toObject());
+  next();
+});
+
+module.exports = mongoose.model("Item", ItemSchema);
