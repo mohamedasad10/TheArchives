@@ -44,7 +44,7 @@ function App() {
       console.log("Update data:", item);
       
       axios
-        .put(`http://localhost:5000/api/items/${id}`, item)
+        .put(`https://thearchives-backend.onrender.com/api/items/${id}`, item)
         .then((res) => {
           console.log("Update response:", res.data);
           // Update the item in the local state
@@ -62,7 +62,7 @@ function App() {
       // Add new item
       console.log("Adding new item:", item);
       axios
-        .post("http://localhost:5000/api/items", item)
+        .post("https://thearchives-backend.onrender.com/api/items", item)
         .then((res) => {
           console.log("Add response:", res.data);
           // Add new item to the beginning of the array
@@ -79,7 +79,7 @@ function App() {
   const handleDelete = (index) => {
     const id = items[index]._id;
     axios
-      .delete(`http://localhost:5000/api/items/${id}`)
+      .delete(`https://thearchives-backend.onrender.com/api/items/${id}`)
       .then(() => {
         // Remove item from local state
         const newItems = items.filter((_, i) => i !== index);
