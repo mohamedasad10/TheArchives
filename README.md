@@ -7,7 +7,6 @@ A full-stack personal archive web app for storing the details of your purchases,
 
 <img src="./Images/TheArchives_HomePage.png" alt="App Screenshot" width="800"/>
 
----
 ## 🌐 Live Demo
 
 👉 **Try it live here**: [CLICK HERE](https://the-archives-nine.vercel.app/)
