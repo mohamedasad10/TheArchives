@@ -23,7 +23,7 @@ I realized I needed a place to store this kind of item-related information for f
 ---
 ## 📸 Preview
 
-<img src="./Images/TheArchives_HomePage.png" alt="App Screenshot" width="600"/>
+<img src="./Images/TheArchives_HomePage.png" alt="App Screenshot" width="800"/>
 
 ---
 
