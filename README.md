@@ -3,6 +3,11 @@
 A full-stack personal archive web app for storing the details of your purchases, items, and prescriptions so you never forget important information again.
 
 ---
+## 🌐 Live Demo
+
+👉 **Try it live here**: [CLICK HERE](https://the-archives-nine.vercel.app/)
+
+---
 
 ## 💡 Inspiration
 
@@ -15,12 +20,10 @@ This app was born from a real-life need.
 I realized I needed a place to store this kind of item-related information for future reference and that's when **TheArchives** was created.
 
 🧠 **Memory fails. The Archives doesn’t.**
-
 ---
+## 📸 Preview
 
-## 🌐 Live Demo
-
-👉 **Try it live here**: [CLICK HERE](https://the-archives-nine.vercel.app/)
+<img src="./images/preview.png" alt="App Screenshot" width="600"/>
 
 ---
 
