@@ -14,6 +14,8 @@ This app was born from a real-life need.
 
 I realized I needed a place to store this kind of item-related information for future reference and that's when **TheArchives** was created.
 
+🧠 **Memory fails. The Archives doesn’t.**
+
 ---
 
 ## 🌐 Live Demo
@@ -41,6 +43,32 @@ I realized I needed a place to store this kind of item-related information for f
 | Database   | MongoDB Atlas                   |
 | Image API  | Unsplash                        |
 | Hosting    | Vercel (Frontend), Render (Backend) |
+
+---
+
+## 📊 Analytics & Insights
+
+This app isn’t just for storing data — it gives you **visual insights** about your spending:
+
+- 💰 **Total Spent**  
+- 🏆 **Top Categories**  
+- 📈 **Spending by Category (Bar Chart)**  
+- 📆 **Spending by Year (Line Chart)**  
+- 🔍 **Custom Queries:**
+  - Spending by **Tag**
+  - Spending by **Year**
+  - Filter items by tag or keyword
+
+---
+## ✨ Features
+
+- ✅ Add and view items with details like:
+  - Name, Tag, Price, Year, Notes, and Image
+- 🔎 Search for items using keywords
+- 🖼️ Fetch product images using Unsplash API
+- 📝 Edit or delete saved items
+- 📦 Automatically stores items in MongoDB
+- 📊 See breakdowns of your purchases with graphs
 
 ---
 
