@@ -8,17 +8,17 @@ A full-stack personal archive web app for storing the details of your purchases,
 
 This app was born from a real-life need.
 
-> Recently, our microwave broke. But we didn’t know how much it originally cost, when we bought it, or where we bought it from — so comparing or replacing it was frustrating.  
+> Recently, our microwave broke. But we didn’t know how much it originally cost, when we bought it, or where we bought it from so comparing or replacing it was frustrating.  
 >  
-> Another time, my doctor prescribed medicine, but I forgot the **name** and **dosage** later when I needed it again.  
+> Another instance was my doctor prescribed medicine, but I forgot the **name** and **dosage** later when I needed it again.  
 
-I realized I needed a place to store this kind of item-related information for future reference — and that's when **TheArchives** was created.
+I realized I needed a place to store this kind of item-related information for future reference and that's when **TheArchives** was created.
 
 ---
 
 ## 🌐 Live Demo
 
-👉 **Try it live here**: [https://thearchives-frontend.vercel.app](https://thearchives-frontend.vercel.app)
+👉 **Try it live here**: [.](https://the-archives-nine.vercel.app/)
 
 ---
 
