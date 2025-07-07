@@ -1,6 +1,6 @@
 # 🧠 TheArchives
 
-A full-stack personal archive web app for storing the details of your purchases, items, and prescriptions — so you never forget important information again.
+A full-stack personal archive web app for storing the details of your purchases, items, and prescriptions so you never forget important information again.
 
 ---
 
@@ -18,7 +18,7 @@ I realized I needed a place to store this kind of item-related information for f
 
 ## 🌐 Live Demo
 
-👉 **Try it live here**: [.](https://the-archives-nine.vercel.app/)
+👉 **Try it live here**: [CLICK HERE](https://the-archives-nine.vercel.app/)
 
 ---
 
@@ -57,7 +57,7 @@ cd TheArchives/backend
 npm install
 
 # Add your environment variables in a .env file:
-MONGO_URI=your_mongodb_connection_string
+MONGO_URI=your_mongodb_connection_string # Get Your MONGO_URI at and follow the steps: https://cloud.mongodb.com
 PORT=5000
 
 # Start backend
@@ -68,7 +68,7 @@ cd ../frontend
 npm install
 
 # Add your .env file:
-VITE_UNSPLASH_ACCESS_KEY=your_unsplash_api_key
+VITE_UNSPLASH_ACCESS_KEY=your_unsplash_api_key # get your own API key from https://unsplash.com/developers 
 
 # Start frontend
 npm run dev
