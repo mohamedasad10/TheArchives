@@ -21,7 +21,7 @@ This app was born from a real-life need.
 >  
 > Another instance was my doctor prescribed medicine, but I forgot the **name** and **dosage** later when I needed it again.  
 
-I realized I needed a place to store this kind of item-related information for future reference and that's when **TheArchives** was created.
+I realized that I needed a place to store this kind of item-related information for future reference and that's when **TheArchives** was created.
 
 🧠 **Memory fails. The Archives doesn’t.**
 
